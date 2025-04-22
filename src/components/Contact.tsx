@@ -80,7 +80,10 @@ const Contact: React.FC = () => {
             },
           ]);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw new Error(error.message || 'Failed to send message');
+        }
 
         setSubmitSuccess(true);
         setFormState({ name: '', email: '', message: '' });
@@ -89,7 +92,8 @@ const Contact: React.FC = () => {
           setSubmitSuccess(false);
         }, 5000);
       } catch (error) {
-        setSubmitError('Failed to send message. Please try again later.');
+        console.error('Form submission error:', error);
+        setSubmitError(error instanceof Error ? error.message : 'Failed to send message. Please try again later.');
       } finally {
         setIsSubmitting(false);
       }
