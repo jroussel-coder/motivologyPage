@@ -77,12 +77,12 @@ const Contact: React.FC = () => {
             email: formState.email.trim(),
             message: formState.message.trim(),
             created_at: new Date().toISOString(),
-          })
-          .select();
+          });
 
         if (error) {
           console.error('Supabase error:', error);
-          throw new Error(error.message || 'Failed to send message');
+          setSubmitError(error.message || 'Failed to send message. Please try again.');
+          return;
         }
 
         setSubmitSuccess(true);
