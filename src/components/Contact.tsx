@@ -72,15 +72,12 @@ const Contact: React.FC = () => {
       try {
         const { error } = await supabase
           .from('contact_messages')
-          .insert([
-            {
-              name: formState.name.trim(),
-              email: formState.email.trim(),
-              message: formState.message.trim(),
-              created_at: new Date().toISOString(),
-            },
-          ])
-          .select();
+          .insert({
+            name: formState.name.trim(),
+            email: formState.email.trim(),
+            message: formState.message.trim(),
+            created_at: new Date().toISOString(),
+          });
 
         if (error) {
           console.error('Supabase error:', error);
