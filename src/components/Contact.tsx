@@ -77,7 +77,8 @@ const Contact: React.FC = () => {
             email: formState.email.trim(),
             message: formState.message.trim(),
             created_at: new Date().toISOString(),
-          });
+          })
+          .select();
 
         if (error) {
           console.error('Supabase error:', error);
