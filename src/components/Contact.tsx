@@ -37,7 +37,7 @@ const Contact: React.FC = () => {
       email: '',
       message: '',
     };
-    
+
     let isValid = true;
 
     if (!formState.name.trim()) {
@@ -64,11 +64,11 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       setIsSubmitting(true);
       setSubmitError('');
-      
+
       try {
         const { error } = await supabase
           .from('contact_messages')
@@ -77,8 +77,10 @@ const Contact: React.FC = () => {
               name: formState.name.trim(),
               email: formState.email.trim(),
               message: formState.message.trim(),
+              created_at: new Date().toISOString(),
             },
-          ]);
+          ])
+          .select();
 
         if (error) {
           console.error('Supabase error:', error);
@@ -87,7 +89,7 @@ const Contact: React.FC = () => {
 
         setSubmitSuccess(true);
         setFormState({ name: '', email: '', message: '' });
-        
+
         setTimeout(() => {
           setSubmitSuccess(false);
         }, 5000);
@@ -103,7 +105,7 @@ const Contact: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
-    
+
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -118,11 +120,11 @@ const Contact: React.FC = () => {
             Ready to transform your business with AI? Contact us today to discuss how our solutions can help you achieve your goals.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="bg-blue-50 p-8 rounded-lg">
             <h3 className="text-2xl font-semibold text-blue-900 mb-6">Contact Information</h3>
-            
+
             <div className="space-y-6">
               <div className="flex items-start">
                 <div className="bg-white p-3 rounded-full mr-4">
@@ -135,7 +137,7 @@ const Contact: React.FC = () => {
                   </a>
                 </div>
               </div>
-              
+
               <div className="flex items-start">
                 <div className="bg-white p-3 rounded-full mr-4">
                   <MapPin className="h-6 w-6 text-blue-600" />
@@ -148,7 +150,7 @@ const Contact: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-10">
               <h4 className="text-lg font-medium text-blue-900 mb-4">Follow Us</h4>
               <div className="flex space-x-4">
@@ -166,7 +168,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -186,7 +188,7 @@ const Contact: React.FC = () => {
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
               </div>
-              
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email
@@ -204,7 +206,7 @@ const Contact: React.FC = () => {
                 />
                 {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
               </div>
-              
+
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                   Message
@@ -222,7 +224,7 @@ const Contact: React.FC = () => {
                 />
                 {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
               </div>
-              
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -244,13 +246,13 @@ const Contact: React.FC = () => {
                   </>
                 )}
               </button>
-              
+
               {submitSuccess && (
                 <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
                   Your message has been sent successfully. We'll get back to you soon!
                 </div>
               )}
-              
+
               {submitError && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
                   {submitError}
